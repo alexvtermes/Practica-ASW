@@ -1,0 +1,93 @@
+<head>
+    <title>Edit comment | Hacker News</title>
+</head>
+
+<body>
+<center>
+    <table bgcolor="#f6f6ef" border="0" cellpadding="0" cellspacing="0" width="85%">
+        <tbody>
+        <tr>
+            <td bgcolor="ff6600">
+                <table style="padding:2px" border="0" cellpadding="0" cellspacing="0" width="100%">
+                     <tbody>
+                        <tr>
+                           <td style="width:18px;padding-right:4px;">
+                              <a href="/submissions">
+                              <img src="/assets/logo.gif" style="border: 1px #ffffff solid;" width="18" height="18">
+                              </a>
+                           </td>
+                           <td style="line-height: 12pt; height: 10px;">
+                              <span class="headerPage">
+                              <b>
+                              <a href="/submissions">Hacker News</a>
+                              </b>
+                              <span style="display:inline-block; width: 2px;"></span>
+                              <a href="/newest">new</a>
+                              |
+                              <% if current_user %>
+                                  <a href="/threads">threads</a>
+                                  |
+                              <% end %>
+                              <a href="/ask">ask</a>
+                              |
+                              <a href="/submissions/new">submit</a>
+                              </span>
+                           </td>
+                           <td style="text-align: right;padding-right: 4px;">
+                              <span class="headerPage">
+                                <% if current_user %>
+                                           <a href="/users/<%= current_user.id %>">
+                                       <strong><%= current_user.name %></strong></a>
+                                    (<%= current_user.karma %>)
+                                    |
+                                           <%= link_to "logout", signout_path, id: "sign_out" %>
+                                     <% else %>
+                                           <%= link_to "login", "/auth/google_oauth2", id: "sign_in" %>
+                                     <% end %>
+                              </span>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+            </td>
+        </tr>
+        <tr style="height:6px"></tr>
+                <tr>
+                <td>
+                <table class="subtitle" style="padding-left:6px">
+                <tr>
+                    <td colspan="2"></td>
+                    <td style="padding-top:10px">
+                        <a style="color:grey" href="/users/<%= @comment.user.id %>"><%= @comment.user.name %></a>
+                    </td>
+                    <td style="padding-top:10px">
+                    <% time = (Time.now() - @comment.created_at) %>
+                                                
+                        <% if time < 3600 %>
+                            <%= (time/60).round %> minutes ago | 
+                        <% end %>
+                    
+                        <% if time >= 3600 && time < 3600*24 %>
+                            <%= (time/3600).round %> hours ago | 
+                        <% end %>
+                        
+                        <% if time >= 3600*24 %>
+                            <%= (time/(3600*24)).round %> days ago | 
+                        <% end %>
+                    </td>
+                    <td style="padding-top:10px">
+                        <a href="/submissions/<%= @comment.submission_id %>" ><%= @comment.submission.title%></a>
+                    </td>
+                </tr>
+                </table>
+                </td>
+                </tr>
+
+                <tr style="height:10px"></tr>
+            <td>
+                <%= render 'form' %>
+            </td>
+        </tbody>
+    </table>
+</center>
+</body>

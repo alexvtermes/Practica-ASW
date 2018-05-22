@@ -1,0 +1,105 @@
+<head>
+    <title><%= @reply.content %> | Hacker News</title>
+</head>
+
+<body>
+    <center>
+        <table width="85%" cellspacing="0"  cellpadding="0" border="0" bgcolor="#f6f6ef">
+            <tbody>
+                <tr>
+                    <td bgcolor="#ff6600">
+                        <table style="padding: 2px" width="100%" cellspacing="0" cellpadding="0" border="0">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 18px;padding-right: 4px">
+                                        <a href="/submissions">
+                                            <img src="/assets/logo.gif" style="border: 1px #ffffff solid;" width="18" height="18">
+                                        </a>
+                                    </td>
+                                    <td style="line-height: 12pt; height: 10px;">
+                                        <span class="headerPage">
+                                            <b>Add Comment</b>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height:6px"></tr>
+                <tr>
+                <td>
+                    <% flash.each do |key, value| %>
+                      <div class="alert"><%= value %></div>
+                      <hr>
+                    <% end %>
+                <table>
+                <tr>
+                    <td>
+                        <% if current_user && current_user.id != @reply.user.id && !current_user.voted_for?(@reply)%>
+                                    <%= link_to image_tag("arrow.gif"), "/submissions/" + @reply.id.to_s + "/vote", method: :post %>
+                                 <% elsif current_user && current_user.id == @reply.user.id%>
+                                    <font color="orange" size="3">*</font>
+                                 <% elsif current_user == nil %>
+                                    <a href="/auth/google_oauth2"> <img src="/assets/arrow.gif"></a>
+                                 <% else %>
+                                    <span style="display: inline-block; width: 10px"></span>
+                                 <% end %>                    
+                        </td>
+                    <td class="urlTitle">
+                        <a style="color:grey" href="/users/<%= @reply.user.id %>"><%= @reply.user.name %></a>
+                    </td>
+                    <td>
+                    <% time = (Time.now() - @reply.created_at) %>
+                                                
+                        <% if time < 3600 %>
+                            <span class="urlTitle"> <%= (time/60).round %> minutes ago</span> |
+                        <% end %>
+                    
+                        <% if time >= 3600 && time < 3600*24 %>
+                            <span class="urlTitle"> <%= (time/3600).round %> hours ago</span> |
+                        <% end %>
+                        
+                        <% if time >= 3600*24 %>
+                            <span class="urlTitle"><%= (time/(3600*24)).round %> days ago</span> |
+                        <% end %>
+                    </td>
+                    <td>
+                        <a href="/submissions/" > <span class="urlTitle" >parent</span></a>
+                    </td>
+                    <td>
+                        |
+                        <span class="threads">on:</span>
+                        <a href="/submissions/"> <span class="urlTitle"></span></a>
+                    </td>
+                </tr>
+            <table>
+                <tr>
+                    <td style="color:black">
+                    <div style="padding-left:12px">
+                        <%= @reply.content %>
+                    </div>
+                            <form action="/repliesR" method="POST" id="reply_content_form" style="padding:10px">
+                                <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token %>">
+                                <% if current_user %>
+                                    <input type="hidden" name="reply[user_id]" value=<%= current_user.id %>>
+                                <% else %>
+                                    <input type="hidden" name="reply[user_id]" value=<%= %>>
+                                <% end %>
+                                <input type="hidden" name="reply[reply_parent_id]" value=<%=@reply.id %>>
+                                <input type="hidden" name="reply[submission_id]" value=<%=@reply.submission_id %>>
+                                <textarea name="reply[content]" value="" form="reply_content_form" style="min-width:500px;min-height:100px"></textarea>
+                                <br>
+                                <br>
+                                <input type="submit" value="reply">
+                            </form>
+                    </td>
+                </tr>
+            </table>
+                </table>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </center>
+</body>

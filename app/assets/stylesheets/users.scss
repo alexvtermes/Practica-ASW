@@ -1,0 +1,26 @@
+// Place all the styles related to the Users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+textarea {
+ font-family:monospace; 
+ font-size:10pt;
+ height: 90px;
+ width: 412px;
+}
+
+.container {
+	padding-left:10px;
+}
+
+.profile_table {
+	border-spacing:0.5em;
+}
+
+.name {
+	color:green;
+}
+
+.about {
+	padding-left:11px;
+}

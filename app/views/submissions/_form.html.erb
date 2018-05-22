@@ -1,0 +1,74 @@
+<%= form_for(@submission) do |f| %>
+<% if @submission.errors.any? %>
+<div id="error_explanation">
+   <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>
+   <ul>
+      <% @submission.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+   </ul>
+</div>
+<% end %>
+<table border="0">
+   <tbody>
+      <tr>
+         <td>title</td>
+         <td>
+            <div class="textField">
+               <%= f.text_field :title, :maxlength => 80%>
+            </div>
+         </td>
+      </tr>
+      <tr>
+         <td>url</td>
+         <td>
+            <div class="textField">
+               <%= f.text_field :url%>
+            </div>
+         </td>
+      </tr>
+      <tr>
+         <td></td>
+         <td>
+            <b>or</b>
+         </td>
+      </tr>
+      <tr>
+         <td>text</td>
+         <td>
+            <div class="field">
+               <%= f.text_area :text %>
+            </div>
+         </td>
+      </tr>
+      <tr>
+         <td></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td></td>
+         <td>
+            <div class="actions">
+               <%= f.submit :submit %>
+            </div>
+         </td>
+      </tr>
+      <tr style="height: 20px"></tr>
+      <tr>
+         <td></td>
+         <td>
+            Leave url blank to submit a question for discussion. If there is no url, the text (if any) will appear at the top of the thread.
+            <br>
+            <br>
+            You can also submit via
+            <a href="#" rel="nofollow">
+            <u>bookmarklet</u>
+            </a>
+            .
+            <br>
+            <br>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<% end %>

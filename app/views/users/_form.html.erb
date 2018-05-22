@@ -1,0 +1,28 @@
+<%= form_with(model: user, local: true) do |form| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <table class="profile_table">
+  <tr>
+    <td><p>about:</p></td>
+      <div class="field">
+        <td><div class="about"><%= form.text_area :about, id: :user_about %></div></td>
+      </div>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <div class="actions">
+        <td><%= form.submit :update %></td>
+      </div>
+    </tr>
+  </table>
+<% end %>

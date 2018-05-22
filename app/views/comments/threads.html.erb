@@ -1,0 +1,127 @@
+<head>
+    <title><%= current_user.name %>'s comments | Hacker News</title>
+</head>
+<body>
+   <center>
+      <table bgcolor="#f6f6ef" border="0" cellpadding="0" cellspacing="0" width="85%">
+         <tbody>
+            <tr>
+               <td bgcolor="ff6600">
+                  <table style="padding:2px" border="0" cellpadding="0" cellspacing="0" width="100%">
+                     <tbody>
+                        <tr>
+                           <td style="width:18px;padding-right:4px;">
+                              <a href="/submissions">
+                              <img src="/assets/logo.gif" style="border: 1px #ffffff solid;" width="18" height="18">
+                              </a>
+                           </td>
+                           <td style="line-height: 12pt; height: 10px;">
+                              <span class="headerPage">
+                              <b>
+                              <a href="/submissions">Hacker News</a>
+                              </b>
+                              <span style="display:inline-block; width: 2px;"></span>
+                              <a href="/newest">new</a>
+                              |
+                              <% if current_user %>
+                                  <a href="/threads">threads</a>
+                                  |
+                              <% end %>
+                              <a href="/ask">ask</a>
+                              |
+                              <a href="/submissions/new">submit</a>
+                              </span>
+                           </td>
+                           <td style="text-align: right;padding-right: 4px;">
+                              <span class="headerPage">
+                                <% if current_user %>
+                                    <a href="/users/<%= current_user.id %>">
+                                    <strong><%= current_user.name %></strong></a>
+                                    (<%= current_user.karma %>)
+                                    |
+                                   <%= link_to "logout", signout_path, id: "sign_out" %>
+                                <% else %>
+                                    <%= link_to "login", "/auth/google_oauth2", id: "sign_in" %>
+                                <% end %>
+                              </span>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </td>
+            </tr>
+            <tr style="height:10px"></tr>
+            <tr><td></td></tr>
+            <!-- a Canviar -->
+            <tr>
+                <td>
+                    <table border="0">
+                        <tbody>
+                            <% @commentsandreplies.each do |comment| %>
+                            <% if comment.user_id == current_user.id%>
+                            <tr>
+                                <td><span></span></td>
+                                <td></td>
+                                <td>
+                                        <div style="margin-top: 2px; margin-bottom: -10px;">
+                                            <span class="threads"><font color="#ff6600" size="2">* </font><%= comment.get_upvotes.size %> points by</span> 
+                                            <a href="/users/<%= comment.user_id %>"> <span class="urlTitle"><font color="#3c963c"> <%= current_user.name %></font></span></a>
+                                            <% time = (Time.now() - comment.created_at) %>
+                                            <% if time < 3600 %>
+                                                <a href="#"><span class="urlTitle"><%= (time/60).round %> minutes ago</span></a> 
+                                            <% end %>
+                                            <% if time >= 3600 && time < 3600*24 %>
+                                                <a href="#"> <span class="urlTitle"><%= (time/3600).round %> hours ago</span></a>
+                                            <% end %>
+                                            <% if time >= 3600*24 %>
+                                              <a href="#"> <span class="urlTitle"> <%= (time/(3600*24)).round %> days ago</span></a>
+                                            <% end %>
+                                            <span class="threads">|</span>
+                                            <% if comment.kind_of? Comment %>
+                                                <a href="/submissions/<%= comment.submission_id %>"> <span class="urlTitle">parent</span></a> 
+                                                <a href="/comments/<%= comment.id %>/edit"> <span class="urlTitle"> edit</span></a>
+                                                <span class="threads">on:</span>
+                                                <a href="/submissions/<%= comment.submission_id %>"> <span class="urlTitle"> <%= comment.submission.title %> </span></a>
+                                            <% end %>
+                                            <% if comment.kind_of? Reply %>
+                                                <% if !comment.comment.nil? %>
+                                                    <a  href="/comments/<%= comment.comment_id %>/new_reply"> <span class="urlTitle">parent</span></a> 
+                                                    <a  href="/replies/<%= comment.id %>/edit"><span class="urlTitle">edit</span></a>
+                                                    <span class="threads">on:</span>
+                                                    <span class="urlTitle"><%= comment.comment.content %></span>
+                                                <% else %>
+                                                    <a  href="/replies/<%= comment.parent.id %>/new_reply"> <span class="urlTitle">parent</span></a> 
+                                                    <a  href="/replies/<%= comment.id %>/edit"><span class="urlTitle">edit</span></a>
+                                                    <span class="threads">on:</span>
+                                                    <span class="urlTitle"><%= comment.parent.content %></span>
+                                                <% end %>
+                                            <% end %>
+                                        </div>
+                                    <br>
+                                    <div style="margin-left:10px">
+                                        <span>
+                                            <%= comment.content%>
+                                            <span></span>
+                                            <div class="reply">
+                                                <p>
+                                                    <font size="1"></font>
+                                                </p>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                            <% end %>
+
+                            <% end %>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            
+            <!-- fins aqui -->
+        </tbody>
+    </table>
+</center>
+</body>
